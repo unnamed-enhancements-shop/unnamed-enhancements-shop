@@ -590,7 +590,7 @@
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; }
     }
-  </style>
+      .product-grid { grid-template-columns: minmax(0, 500px); }     .product-card { min-width: 0; overflow: hidden; border: 1px solid #2b2b2b; border-radius: 28px; background: #141414; transition: border-color .2s ease, transform .2s ease; }     .product-card:hover { border-color: var(--accent); transform: translateY(-3px); }     .product-art { display: grid; place-items: center; }     .product-art::after { position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 50%, rgba(255,255,255,.07), transparent 55%); content: ""; pointer-events: none; }     .product-tag { z-index: 1; top: 20px; left: 20px; padding: 6px 12px; font-size: 12px; letter-spacing: 0; text-transform: none; }     .digital-product-art > span:first-child { z-index: 1; font-size: clamp(72px, 10vw, 104px); }     .product-type { margin-left: 9px; padding: 4px 9px; border-radius: 7px; font-size: 12px; }     .product-details { padding: 0 20px 20px; }     .product-info { padding: 16px 0 0; }     .product-name { font-size: 18px; }     .product-category { margin: 13px 0 18px; color: #ccc; font-size: 15px; line-height: 1.55; }     .product-price-group { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; white-space: nowrap; }     .product-price-label { color: #bcbcbc; font-size: 12px; }     .product-price { font-size: 28px; }     .product-price::before { display: block; margin-bottom: 2px; color: #bcbcbc; content: "One-time"; font-size: 12px; font-weight: 400; }     .product-actions { display: flex; align-items: center; gap: 18px; }     .product-buy-button { display: flex; min-width: 0; min-height: 56px; flex: 1; align-items: center; justify-content: center; gap: 14px; border: 1px solid #303030; border-radius: 999px; background: transparent; color: var(--ink); cursor: pointer; font-size: 16px; font-weight: 650; transition: background .2s ease, border-color .2s ease; }     .product-buy-button:hover { border-color: var(--accent); background: #1d1d1d; }     .product-buy-icon { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.8; }     .payment-instructions { margin: 14px 1px 0; padding: 0; border: 0; color: #aaa; font-size: 11px; line-height: 1.55; }     @media (max-width: 900px) { .product-grid { grid-template-columns: minmax(0, 500px); } }     @media (max-width: 620px) {       .product-art { aspect-ratio: 1.45 / 1; }       .product-details { padding: 0 15px 16px; }       .product-name { font-size: 15px; }       .product-type { margin-left: 5px; padding: 3px 6px; font-size: 10px; }       .product-category { font-size: 13px; }       .product-price { font-size: 23px; }       .product-actions { gap: 12px; }       .product-buy-button { min-height: 50px; font-size: 14px; }       .product-price-label { font-size: 10px; }     }   </style>
 </head>
 <body>
   <div class="announcement">DIGITAL ACCESS <span>· 200 ROBUX</span> · LIFETIME KEY</div>
@@ -720,14 +720,14 @@
             <div class="product-art digital-product-art" role="img" aria-label="${product.name} logo artwork">
               <span aria-hidden="true">UE</span>
               ${product.tag ? `<span class="product-tag">${product.tag}</span>` : ""}
-              <button class="quick-add" type="button" data-add="${product.id}" aria-label="Add ${product.name} to bag">+</button>
+              
             </div>
-            <div class="product-info">
+            <div class="product-details"><div class="product-info">
               <div><h3 class="product-name">${product.name}<span class="product-type">${product.category}</span></h3><p class="product-category">${product.detail}</p></div>
               <p class="product-price">${formatPrice(product)}</p>
             </div>
-            <p class="payment-instructions">Pay <strong>${sellerUsername}</strong> 200 Robux for the UE product, then message <strong>${discordUsername}</strong> on Discord to receive it. Payment is confirmed manually.</p>
-          </article>`).join("")
+            <div class="product-actions"><button class="product-buy-button" type="button" data-add="${product.id}" aria-label="Buy ${product.name}"><svg class="product-buy-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4h2l2.2 11.2a2 2 0 0 0 2 1.6h8.6a2 2 0 0 0 1.9-1.4L22 9H6"/><circle cx="10" cy="21" r="1"/><circle cx="18" cy="21" r="1"/></svg>Buy Now</button></div><p class="payment-instructions">Pay <strong>${sellerUsername}</strong> 200 Robux for the UE product, then message <strong>${discordUsername}</strong> on Discord to receive it. Payment is confirmed manually.</p>
+          </div></article>`).join("")
         : `<p class="no-results">Nothing here just yet. Try another search.</p>`;
     }
 
@@ -779,7 +779,7 @@
       const current = cart.get(product.id);
       cart.set(product.id, { product, quantity: current ? current.quantity + 1 : 1 });
       updateCart();
-      showToast(`${product.name} added to your bag`);
+      showToast(`${product.name} added to your bag`); setCartOpen(true);
     });
 
     document.querySelector("#cart-items").addEventListener("click", event => {
@@ -816,7 +816,7 @@
       if (event.key === "Escape") setCartOpen(false);
     });
     document.querySelector("#checkout-button").addEventListener("click", () => {
-      showToast(cart.size ? "After payment, confirm the 200 Robux arrived before sending the key." : "Your bag is empty.");
+      showToast(cart.size ? "Pay the seller listed on the product page, then message us on Discord for delivery." : "Your bag is empty.");
     });
     renderProducts();
     updateCart();
